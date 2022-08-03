@@ -1,0 +1,14 @@
+{
+  "resourceName": "entities",
+  "tableName": "entities",
+  "partitionKey": {
+    "fieldName": "pkid",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "skid",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

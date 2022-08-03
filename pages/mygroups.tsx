@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { GroupsView } from "../store/features/groups/GroupsView";
@@ -21,5 +21,23 @@ const MyGroups: NextPage = () => {
     </div>
   );
 };
+
+// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+//   const SSR = withSSRContext({ req });
+
+//   const response = (await SSR.API.graphql({
+//     query: listTodos,
+//     authMode: GRAPHQL_AUTH_MODE.API_KEY,
+//   })) as {
+//     auth;
+//     data: ListTodosQuery;
+//   };
+
+//   return {
+//     props: {
+//       todos: response.data.listTodos.items,
+//     },
+//   };
+// };
 
 export default MyGroups;

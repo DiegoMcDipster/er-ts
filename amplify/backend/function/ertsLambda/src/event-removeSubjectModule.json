@@ -1,0 +1,12 @@
+{
+  "path": "/entities/subject/modules/remove/addition",
+  "httpMethod": "PUT",
+  "queryStringParameters": {
+    "uid": "b4e8f81b-763b-4cf3-878d-c2a6c36d23ad",
+    "parentSubject": "MATHS",
+    "entityType": "module"
+  },
+  "headers": {
+    "content-type": "application/json"
+  }
+}

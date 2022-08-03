@@ -1,0 +1,27 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-erts-dev-83441-authRole",
+      "UnauthRoleArn": "arn:aws:iam::292402550639:role/amplify-erts-dev-83441-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::292402550639:role/amplify-erts-dev-83441-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-erts-dev-83441-deployment",
+      "UnauthRoleName": "amplify-erts-dev-83441-unauthRole",
+      "StackName": "amplify-erts-dev-83441",
+      "StackId": "arn:aws:cloudformation:eu-central-1:292402550639:stack/amplify-erts-dev-83441/5d4967e0-12f6-11ed-a4d3-06d06de3de9a",
+      "AmplifyAppId": "d20fkteu0ejklc",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-erts-dev-83441-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "undefined": {}
+      },
+      "function": {
+        "ertsLambda": {
+          "deploymentBucketName": "amplify-erts-dev-83441-deployment",
+          "s3Key": "amplify-builds/ertsLambda-72336b76715667694533-build.zip"
+        }
+      }
+    }
+  }
+}

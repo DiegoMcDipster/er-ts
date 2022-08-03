@@ -1,0 +1,10 @@
+{
+  "path": "/entities/subject/add/history",
+  "httpMethod": "PUT",
+  "queryStringParameters": {
+    "uid": "62b91814-81a0-4590-a7dc-93ee660c19c5"
+  },
+  "headers": {
+    "content-type": "application/json"
+  }
+}

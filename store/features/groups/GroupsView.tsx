@@ -1,19 +1,27 @@
+import { useEffect } from "react";
 import EntityForm from "../../../Components/EntityForm";
 import { DeleteIcon } from "../../../Components/Icons";
 import { GROUP } from "../../../types/stateTypes";
 import { useAppDispatch, useAppSelector } from "../../hook";
-import { addGroup, removeGroup } from "./groupsSlice";
+import { addGroup, fetchGroups, removeGroup } from "./groupsSlice";
 
 export const GroupsView = () => {
+  // DEMO UID
+  const uid = "DEMO-APP-RANDOM-UID";
+
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state) => state.groups.groupsList);
 
+  useEffect(() => {
+    dispatch(fetchGroups());
+  }, [dispatch]);
+
   const handleAddGroup = (value: string) => {
-    dispatch(addGroup(value));
+    dispatch(addGroup({ value, uid }));
   };
 
   const handleRemoveGroup = (value: string) => {
-    dispatch(removeGroup(value));
+    dispatch(removeGroup({ value, uid }));
   };
 
   return (

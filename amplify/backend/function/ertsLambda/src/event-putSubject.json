@@ -1,0 +1,10 @@
+{
+  "path": "/entities/subject/add/maths",
+  "httpMethod": "PUT",
+  "queryStringParameters": {
+    "uid": "b4e8f81b-763b-4cf3-878d-c2a6c36d23ad"
+  },
+  "headers": {
+    "content-type": "application/json"
+  }
+}
