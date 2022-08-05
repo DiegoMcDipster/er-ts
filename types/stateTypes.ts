@@ -3,11 +3,18 @@ export const MODULE: string = "MODULE";
 export const SUBJECT: string = "SUBJECT";
 
 export type Subject = {
-  subject: string;
+  name: string;
   modules: string[];
 };
 
-export type Module = {
+export type ModuleUpdateProps = {
   subjectId: number;
   module: string;
+};
+
+export type UpdateEntityProps = {
+  value: string;
+  uid: string;
+  subjectIndex?: number;
+  subjectName?: string;
 };

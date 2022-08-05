@@ -19,7 +19,7 @@
       "function": {
         "ertsLambda": {
           "deploymentBucketName": "amplify-erts-dev-83441-deployment",
-          "s3Key": "amplify-builds/ertsLambda-72336b76715667694533-build.zip"
+          "s3Key": "amplify-builds/ertsLambda-3947787676453551456f-build.zip"
         }
       }
     }

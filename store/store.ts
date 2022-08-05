@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import groupsReducer from "./features/groups/groupsSlice";
-import subjModulesReducer from "./features/subjects/subjModulesSlice";
+import subjectsReducer from "./features/subjects/subjectsSlice";
 
 const store = configureStore({
   reducer: {
     groups: groupsReducer,
-    subjModules: subjModulesReducer,
+    subjects: subjectsReducer,
   },
 });
 

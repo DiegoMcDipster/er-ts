@@ -5,23 +5,23 @@ import { GROUP } from "../../../types/stateTypes";
 import { useAppDispatch, useAppSelector } from "../../hook";
 import { addGroup, fetchGroups, removeGroup } from "./groupsSlice";
 
-export const GroupsView = () => {
-  // DEMO UID
-  const uid = "DEMO-APP-RANDOM-UID";
+// This constant is only here for demo purposes!
+import { UID } from "../../../demo-const";
 
+export const GroupsView = () => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state) => state.groups.groupsList);
 
   useEffect(() => {
-    dispatch(fetchGroups());
+    dispatch(fetchGroups(UID));
   }, [dispatch]);
 
   const handleAddGroup = (value: string) => {
-    dispatch(addGroup({ value, uid }));
+    dispatch(addGroup({ value, uid: UID }));
   };
 
   const handleRemoveGroup = (value: string) => {
-    dispatch(removeGroup({ value, uid }));
+    dispatch(removeGroup({ value, uid: UID }));
   };
 
   return (

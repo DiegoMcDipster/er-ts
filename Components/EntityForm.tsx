@@ -3,12 +3,19 @@ import { GROUP, MODULE, SUBJECT } from "../types/stateTypes";
 
 type EntityFormProps = {
   label: string;
-  handler: (value: string, index?: number) => void;
+  handler: (value: string, subjectIndex?: number, subjectName?: string) => void;
   entityType: string;
-  index?: number;
+  subjectIndex?: number;
+  subjectName?: string;
 };
 
-const EntityForm = ({ label, handler, entityType, index }: EntityFormProps) => {
+const EntityForm = ({
+  label,
+  handler,
+  entityType,
+  subjectIndex,
+  subjectName,
+}: EntityFormProps) => {
   const [value, setValue] = useState("");
 
   const handleClick = () => {
@@ -19,8 +26,9 @@ const EntityForm = ({ label, handler, entityType, index }: EntityFormProps) => {
           break;
 
         case entityType === MODULE:
-          handler(value, index);
+          handler(value, subjectIndex, subjectName);
 
+          break;
         default:
           break;
       }

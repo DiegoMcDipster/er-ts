@@ -25,15 +25,19 @@ const putSubject = async (data) => {
         ":e": [newSubject.importData.subject],
         ":empty": [],
       },
+      ReturnValues: "ALL_NEW",
     };
 
     console.log("lib/subjects: putSubject: the params are: ", params);
 
     const command = new UpdateCommand(params);
 
-    await dynamodb.send(command);
+    const result = await dynamodb.send(command);
 
-    return `SUBJECTS: ${newSubject.importData.subject.name} was added!`;
+    return {
+      udpatedData: result.Attributes["subjects"],
+      message: `SUBJECTS: ${newSubject.importData.subject.name} was added!`,
+    };
   } catch (error) {
     console.log("putSubject: There was an error: ", error);
     throw error;
@@ -62,15 +66,19 @@ const putModule = async (data) => {
       ExpressionAttributeValues: {
         ":e": [subject.importData.module],
       },
+      ReturnValues: "ALL_NEW",
     };
 
     console.log("lib/subjects: putModule: the params are: ", params);
 
     const command = new UpdateCommand(params);
 
-    await dynamodb.send(command);
+    const result = await dynamodb.send(command);
 
-    return `MODULES: ${subject.importData.module} was added!`;
+    return {
+      updatedData: result.Attributes["subjects"],
+      message: `MODULES: ${subject.importData.module} was added!`,
+    };
   } catch (error) {
     console.log("putModule: There was an error: ", error);
     throw error;

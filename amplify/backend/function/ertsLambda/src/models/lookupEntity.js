@@ -7,15 +7,15 @@ const skEntity = "ESCAPEROOM";
 
 /**
  * For import into DynamoDB:
- * - set the data type: LABELS or SUBJECTS
+ * - set the data type: GROUPS or SUBJECTS
  * - read the uid and generate the pkid
  * - generate the skid
  * - prepare for import: set the pkid, skid and label/subject
  *
  * For export from DynamoDB:
- * - set the data type: LABELS or SUBJECTS
+ * - set the data type: GROUPS or SUBJECTS
  * - read the pkid and skid
- * - labels & subjects: extract the uid and values
+ * - groups & subjects: extract the uid and values
  *
  */
 

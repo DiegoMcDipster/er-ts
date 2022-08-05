@@ -1,8 +1,4 @@
-const {
-  GetCommand,
-  QueryCommand,
-  UpdateCommand,
-} = require("@aws-sdk/lib-dynamodb");
+const { GetCommand, UpdateCommand } = require("@aws-sdk/lib-dynamodb");
 const { LookupEntity } = require("../models/lookupEntity");
 const { dynamodbClient, setTableName } = require("./db");
 
@@ -119,7 +115,7 @@ const getItem = async (data) => {
       return lookUpItem.exportData;
     }
     // if no data return an empty object
-    return {};
+    return [];
   } catch (error) {
     console.log("getItem: There was an error: ", error);
     throw error;

@@ -9,7 +9,7 @@ const {
   putModule,
   removeModule,
 } = require("./lib/subjects");
-const UID = "9999-AAAAA-BBBBB-CCCCC"; // for testing purposes only
+const UID = "DEMO-APP-RANDOM-UID"; // for testing purposes only
 
 // declare a new express app
 const app = express();
@@ -71,13 +71,17 @@ app.put("/entities/subject/add/:subject", async (req, res) => {
 
     const list = subjects["subjects"];
 
+    let updatedData = list;
     // Only insert a value if it doesn't already exist in list
     if (!list || list.findIndex((item) => item.name === subject) === -1) {
-      message = await putSubject(data);
+      const result = await putSubject(data);
+      message = result.message;
+      updatedData = result.udpatedData;
     }
 
     res.json({
-      success: message,
+      data: updatedData,
+      message,
     });
   } catch (error) {
     console.log(`There was an error when adding the subject : `, error);
@@ -152,6 +156,7 @@ app.put("/entities/subject/modules/add/:module", async (req, res) => {
 
     const subjectList = subjects["subjects"];
 
+    let updatedData = subjectList;
     // The parentSubject must exist in the subjectList
     data.subjectIndex = subjectList.findIndex(
       (item) => item.name === parentSubject
@@ -164,12 +169,15 @@ app.put("/entities/subject/modules/add/:module", async (req, res) => {
 
       if (moduleIndex === -1) {
         // add the module
-        message = await putModule(data);
+        const result = await putModule(data);
+        message = result.message;
+        updatedData = result.updatedData;
       }
     } else message = `SUBJECTS: ${parentSubject} does not exist`;
 
     res.json({
-      success: message,
+      data: updatedData,
+      message,
     });
   } catch (error) {
     console.log(
@@ -183,7 +191,7 @@ app.put("/entities/subject/modules/add/:module", async (req, res) => {
 
 /***********************************************************
  * PUT /entities/subject/modules/remove/:module
- * For removing a subject
+ * For removing a module
  **********************************************************/
 app.put("/entities/subject/modules/remove/:module", async (req, res) => {
   const { uid, parentSubject, entityType } = req.query;

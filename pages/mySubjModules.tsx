@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { SubjectsModulesView } from "../store/features/subjects/SubjModulesView";
+import { SubjectsView } from "../store/features/subjects/subjectsView";
 import styles from "../styles/Home.module.css";
 
 const MySubjModules: NextPage = () => {
@@ -16,7 +16,7 @@ const MySubjModules: NextPage = () => {
       <main className={styles.main}>
         <Link href="/">Home</Link>
         <h1 className={styles.title}>My Subjects and Modules</h1>
-        <SubjectsModulesView />
+        <SubjectsView />
       </main>
     </div>
   );
