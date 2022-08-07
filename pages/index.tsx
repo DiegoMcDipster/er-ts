@@ -16,16 +16,14 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <h1 className={styles.title}>ER in TS</h1>
 
-        <div className={styles.grid}>
-          <Link href="/mySubjModules">
+        <div className={styles.grid} data-cy="grid">
+          <Link href="/my-subj-modules">
             <a className={styles.card}>
               <h2>My Subjects and Modules</h2>
               <p>All Subjects and Modules we need</p>
             </a>
           </Link>
-        </div>
-        <div className={styles.grid}>
-          <Link href="/mygroups">
+          <Link href="/my-groups">
             <a className={styles.card}>
               <h2>My Groups</h2>
               <p>All the groups we need</p>

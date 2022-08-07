@@ -42,8 +42,11 @@ const EntityForm = ({
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        data-cy="input-field"
       />
-      <button onClick={handleClick}>{label}</button>
+      <button onClick={handleClick} data-cy="submit-btn">
+        {label}
+      </button>
     </div>
   );
 };

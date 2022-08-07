@@ -27,10 +27,9 @@ export const GroupsView = () => {
   return (
     <div>
       <div>
-        <h2>My Groups</h2>
         <ol>
           {groups.map((item, index) => (
-            <li key={index}>
+            <li key={index} data-cy={`group-${index}`}>
               {item}
               <DeleteIcon handler={() => handleRemoveGroup(item)} />
             </li>

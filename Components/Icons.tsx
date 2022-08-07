@@ -9,6 +9,7 @@ export const DeleteIcon = ({ handler }: DeleteIconProps) => {
     <RiDeleteBin6Line
       style={{ marginLeft: "16px", cursor: "pointer" }}
       onClick={handler}
+      data-cy="delete-icon"
     />
   );
 };
