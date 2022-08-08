@@ -1,6 +1,4 @@
-export const GROUP: string = "GROUP";
-export const MODULE: string = "MODULE";
-export const SUBJECT: string = "SUBJECT";
+export type EntityType = "GROUP" | "SUBJECT" | "MODULE";
 
 export type Subject = {
   name: string;

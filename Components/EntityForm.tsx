@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { GROUP, MODULE, SUBJECT } from "../types/stateTypes";
+import { EntityType } from "../types/stateTypes";
 
 type EntityFormProps = {
   label: string;
   handler: (value: string, subjectIndex?: number, subjectName?: string) => void;
-  entityType: string;
+  entityType: EntityType;
   subjectIndex?: number;
   subjectName?: string;
 };
@@ -21,11 +21,11 @@ const EntityForm = ({
   const handleClick = () => {
     if (value.length > 0) {
       switch (true) {
-        case entityType === SUBJECT || entityType === GROUP:
+        case entityType === "SUBJECT" || entityType === "GROUP":
           handler(value);
           break;
 
-        case entityType === MODULE:
+        case entityType === "MODULE":
           handler(value, subjectIndex, subjectName);
 
           break;

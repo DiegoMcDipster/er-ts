@@ -2,7 +2,6 @@ import {
   inputFieldSelector,
   submitBtnSelector,
 } from "../cypress/support/types";
-import { GROUP } from "../types/stateTypes";
 import EntityForm from "./EntityForm";
 
 const btnLabel = "Add Item";
@@ -11,7 +10,7 @@ const someText = "An item";
 describe("The Entity Form", () => {
   const mountComponent = (handler = () => {}) => {
     cy.mount(
-      <EntityForm label={btnLabel} entityType={GROUP} handler={handler} />
+      <EntityForm label={btnLabel} entityType={"GROUP"} handler={handler} />
     );
   };
 

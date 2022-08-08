@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import EntityForm from "../../../Components/EntityForm";
 import { DeleteIcon } from "../../../Components/Icons";
-import { MODULE, SUBJECT } from "../../../types/stateTypes";
 import { useAppDispatch, useAppSelector } from "../../hook";
 import {
   addModule,
@@ -77,7 +76,7 @@ export const SubjectsView = () => {
               <EntityForm
                 handler={handleAddModule}
                 label="Add Module New"
-                entityType={MODULE}
+                entityType={"MODULE"}
                 subjectIndex={index}
                 subjectName={item.name}
               />
@@ -89,7 +88,7 @@ export const SubjectsView = () => {
       <EntityForm
         handler={handleAddSubject}
         label="Add Subject New"
-        entityType={SUBJECT}
+        entityType={"SUBJECT"}
       />
     </div>
   );
