@@ -4,6 +4,7 @@ import {
   ModuleUpdateProps,
   Subject,
   UpdateEntityProps,
+  UpdateSubjectModuleProps,
 } from "../../../types/stateTypes";
 
 type InitialState = {
@@ -35,12 +36,12 @@ export const removeSubject = createAsyncThunk(
 
 export const addModule = createAsyncThunk(
   "entities/module/add",
-  async ({ value, uid, subjectIndex, subjectName }: UpdateEntityProps) => {
-    await handleUpdate({ value, uid }, "add", "module", subjectName);
+  async ({ entity, subjectIndex, subjectName }: UpdateSubjectModuleProps) => {
+    await handleUpdate(entity, "add", "module", subjectName);
 
     const updateModule: ModuleUpdateProps = {
-      subjectId: subjectIndex as number,
-      module: value.toUpperCase(),
+      subjectIndex,
+      entity,
     };
 
     return updateModule;
@@ -49,12 +50,12 @@ export const addModule = createAsyncThunk(
 
 export const removeModule = createAsyncThunk(
   "entities/module/remove",
-  async ({ value, uid, subjectIndex, subjectName }: UpdateEntityProps) => {
-    await handleUpdate({ value, uid }, "remove", "module", subjectName);
+  async ({ entity, subjectIndex, subjectName }: UpdateSubjectModuleProps) => {
+    await handleUpdate(entity, "remove", "module", subjectName);
 
     const deletedModule: ModuleUpdateProps = {
-      subjectId: subjectIndex as number,
-      module: value.toUpperCase(),
+      subjectIndex,
+      entity,
     };
 
     return deletedModule;
@@ -75,7 +76,7 @@ const subjectsSlice = createSlice({
     builder.addCase(
       addSubject.fulfilled,
       (state, action: PayloadAction<string>) => {
-        const newSubject = { name: action.payload, modules: [] };
+        const newSubject: Subject = { name: action.payload, modules: [] };
         state.subjectList.push(newSubject);
       }
     );
@@ -93,17 +94,18 @@ const subjectsSlice = createSlice({
       addModule.fulfilled,
       (state, action: PayloadAction<ModuleUpdateProps>) => {
         const array = state.subjectList;
-        const { subjectId, module } = action.payload;
+        const { subjectIndex, entity } = action.payload;
+        const value = entity.value.toUpperCase();
 
-        if (array[subjectId].modules.indexOf(module) === -1)
-          array[subjectId].modules.push(module);
+        if (array[subjectIndex].modules.indexOf(value) === -1)
+          array[subjectIndex].modules.push(value);
       }
     );
     builder.addCase(removeModule.fulfilled, (state, action) => {
-      const { subjectId, module } = action.payload;
-      const array = state.subjectList[subjectId].modules;
-
-      const idx = array.indexOf(module);
+      const { subjectIndex, entity } = action.payload;
+      const value = entity.value.toUpperCase();
+      const array = state.subjectList[subjectIndex].modules;
+      const idx = array.indexOf(value);
 
       if (idx !== -1) array.splice(idx, 1);
     });

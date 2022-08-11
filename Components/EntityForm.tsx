@@ -1,39 +1,18 @@
 import { useState } from "react";
-import { EntityType } from "../types/stateTypes";
+import { isSubjectModule } from "../types/helpers";
+import { EntityFormProps } from "../types/stateTypes";
 
-type EntityFormProps = {
-  label: string;
-  handler: (value: string, subjectIndex?: number, subjectName?: string) => void;
-  entityType: EntityType;
-  subjectIndex?: number;
-  subjectName?: string;
-};
-
-const EntityForm = ({
-  label,
-  handler,
-  entityType,
-  subjectIndex,
-  subjectName,
-}: EntityFormProps) => {
+const EntityForm = (props: EntityFormProps) => {
   const [value, setValue] = useState("");
+  const { label } = props;
 
   const handleClick = () => {
-    if (value.length > 0) {
-      switch (true) {
-        case entityType === "SUBJECT" || entityType === "GROUP":
-          handler(value);
-          break;
+    if (isSubjectModule(props)) {
+      const { handler, subjectIndex, subjectName } = props;
+      handler(value, subjectIndex, subjectName);
+    } else props.handler(value);
 
-        case entityType === "MODULE":
-          handler(value, subjectIndex, subjectName);
-
-          break;
-        default:
-          break;
-      }
-      setValue("");
-    }
+    setValue("");
   };
 
   return (

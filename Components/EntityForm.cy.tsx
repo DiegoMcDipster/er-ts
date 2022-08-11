@@ -9,9 +9,7 @@ const someText = "An item";
 
 describe("The Entity Form", () => {
   const mountComponent = (handler = () => {}) => {
-    cy.mount(
-      <EntityForm label={btnLabel} entityType={"GROUP"} handler={handler} />
-    );
+    cy.mount(<EntityForm label={btnLabel} handler={handler} />);
   };
 
   it("it mounts the form field and submit button", () => {

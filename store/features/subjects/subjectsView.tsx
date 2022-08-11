@@ -12,6 +12,7 @@ import {
 
 // This constant is only here for demo pruposes
 import { UID } from "../../../demo-const";
+import { UpdateEntityProps } from "../../../types/stateTypes";
 
 export const SubjectsView = () => {
   const dispatch = useAppDispatch();
@@ -31,26 +32,20 @@ export const SubjectsView = () => {
 
   const handleAddModule = (
     value: string,
-    subjectIndex: number = NaN,
-    subjectName: string = ""
+    subjectIndex: number,
+    subjectName: string
   ) => {
-    if (subjectIndex === NaN)
-      console.log("handleAddModule: The subjectIndex was not passed");
-    else if (subjectName === "")
-      console.log("handleAddModule: The subjectName was not passed");
-    else dispatch(addModule({ value, uid: UID, subjectIndex, subjectName }));
+    const entity: UpdateEntityProps = { value, uid: UID };
+    dispatch(addModule({ entity, subjectIndex, subjectName }));
   };
 
   const handleRemoveModule = (
     value: string,
-    subjectIndex: number = NaN,
-    subjectName: string = ""
+    subjectIndex: number,
+    subjectName: string
   ) => {
-    if (subjectIndex === NaN)
-      console.log("handleAddModule: The subjectIndex was not passed");
-    else if (subjectName === "")
-      console.log("handleAddModule: The subjectName was not passed");
-    else dispatch(removeModule({ value, uid: UID, subjectIndex, subjectName }));
+    const entity: UpdateEntityProps = { value, uid: UID };
+    dispatch(removeModule({ entity, subjectIndex, subjectName }));
   };
 
   return (
@@ -76,7 +71,6 @@ export const SubjectsView = () => {
               <EntityForm
                 handler={handleAddModule}
                 label="Add Module New"
-                entityType={"MODULE"}
                 subjectIndex={index}
                 subjectName={item.name}
               />
@@ -85,11 +79,7 @@ export const SubjectsView = () => {
         </ol>
       </div>
       <br />
-      <EntityForm
-        handler={handleAddSubject}
-        label="Add Subject New"
-        entityType={"SUBJECT"}
-      />
+      <EntityForm handler={handleAddSubject} label="Add Subject New" />
     </div>
   );
 };

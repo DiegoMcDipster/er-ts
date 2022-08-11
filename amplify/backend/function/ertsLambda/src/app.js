@@ -76,7 +76,7 @@ app.put("/entities/subject/add/:subject", async (req, res) => {
     if (!list || list.findIndex((item) => item.name === subject) === -1) {
       const result = await putSubject(data);
       message = result.message;
-      updatedData = result.udpatedData;
+      updatedData = result.updatedData;
     }
 
     res.json({
@@ -122,7 +122,7 @@ app.put("/entities/subject/remove/:subject", async (req, res) => {
     else {
       const result = await removeSubject(data);
       message = result.message;
-      updatedData = result.udpatedData;
+      updatedData = result.updatedData;
     }
 
     res.json({
@@ -229,7 +229,7 @@ app.put("/entities/subject/modules/remove/:module", async (req, res) => {
       else {
         const result = await removeModule(data);
         message = result.message;
-        updatedData = result.udpatedData;
+        updatedData = result.updatedData;
       }
     } else
       message = `MODULES: The subject ${parentSubject} for the module ${subjModule} - does not exist`;

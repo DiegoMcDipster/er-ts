@@ -35,11 +35,7 @@ export const GroupsView = () => {
           ))}
         </ol>
       </div>
-      <EntityForm
-        handler={handleAddGroup}
-        label="Add Group New"
-        entityType={"GROUP"}
-      />
+      <EntityForm handler={handleAddGroup} label="Add Group New" />
     </div>
   );
 };

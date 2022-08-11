@@ -35,7 +35,7 @@ const putSubject = async (data) => {
     const result = await dynamodb.send(command);
 
     return {
-      udpatedData: result.Attributes["subjects"],
+      updatedData: result.Attributes["subjects"],
       message: `SUBJECTS: ${newSubject.importData.subject.name} was added!`,
     };
   } catch (error) {
@@ -135,7 +135,7 @@ const removeSubject = async (data) => {
     const result = await dynamodb.send(command);
 
     return {
-      udpatedData: result.Attributes["subjects"],
+      updatedData: result.Attributes["subjects"],
       message: `SUBJECTS: ${data.subject} was removed`,
     };
   } catch (error) {
@@ -170,7 +170,7 @@ const removeModule = async (data) => {
     const result = await dynamodb.send(command);
 
     return {
-      udpatedData: result.Attributes["subjects"],
+      updatedData: result.Attributes["subjects"],
       message: `MODULES: ${data.value} was removed`,
     };
   } catch (error) {

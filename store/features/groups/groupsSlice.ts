@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getEntity, handleUpdate, updateEntity } from "../../../lib/entities";
+import { getEntity, handleUpdate } from "../../../lib/entities";
 import { UpdateEntityProps } from "../../../types/stateTypes";
 
 type InitialState = {
