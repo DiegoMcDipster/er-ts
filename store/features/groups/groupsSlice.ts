@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getEntity, handleUpdate } from "../../../lib/entities";
+import { GroupService } from "../../../lib/groupService";
 import { UpdateEntityProps } from "../../../types/stateTypes";
 
 type InitialState = {
@@ -17,20 +17,32 @@ const initialState: InitialState = {
 export const fetchGroups = createAsyncThunk(
   "entities/groups",
   async (uid: string) => {
-    return await getEntity("group", uid);
+    const handler = new GroupService(uid);
+
+    return await handler.fetchData();
   }
 );
 
 export const addGroup = createAsyncThunk(
   "entities/group/add",
-  ({ value, uid }: UpdateEntityProps) =>
-    handleUpdate({ value, uid }, "add", "group")
+  async ({ value, uid }: UpdateEntityProps) => {
+    const handler = new GroupService(uid);
+
+    await handler.putData("add", value);
+
+    return value.toUpperCase();
+  }
 );
 
 export const removeGroup = createAsyncThunk(
   "entities/group/remove",
-  ({ value, uid }: UpdateEntityProps) =>
-    handleUpdate({ value, uid }, "remove", "group")
+  async ({ value, uid }: UpdateEntityProps) => {
+    const handler = new GroupService(uid);
+
+    await handler.putData("remove", value);
+
+    return value.toUpperCase();
+  }
 );
 
 const groupsSlice = createSlice({

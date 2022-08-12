@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getEntity, handleUpdate } from "../../../lib/entities";
+import { EntityAction } from "../../../lib/entityService";
+import { ModuleService } from "../../../lib/moduleService";
+import { SubjectService } from "../../../lib/subjectService";
 import {
   ModuleUpdateProps,
   Subject,
@@ -18,47 +20,80 @@ const initialState: InitialState = {
 export const fetchSubjects = createAsyncThunk(
   "entities/subjects",
   async (uid: string) => {
-    return await getEntity("subject", uid);
+    const handler = new SubjectService(uid);
+
+    return await handler.fetchData();
   }
 );
 
+const handleSubjectUpdate = async (
+  uid: string,
+  action: EntityAction,
+  value: string
+): Promise<string> => {
+  const handler = new SubjectService(uid);
+
+  await handler.putData(action, value);
+
+  return value.toUpperCase();
+};
+
+const handleModuleUpdate = async (
+  uid: string,
+  action: EntityAction,
+  value: string,
+  parentSubject: string,
+  subjectIndex: number
+): Promise<ModuleUpdateProps> => {
+  const handler = new ModuleService(uid);
+
+  await handler.putData(action, value, parentSubject);
+
+  const updateModule: ModuleUpdateProps = {
+    subjectIndex,
+    value: value.toUpperCase(),
+  };
+
+  return updateModule;
+};
+
 export const addSubject = createAsyncThunk(
   "entities/subject/add",
-  async ({ value, uid }: UpdateEntityProps) =>
-    await handleUpdate({ value, uid }, "add", "subject")
+  ({ value, uid }: UpdateEntityProps) => {
+    return handleSubjectUpdate(uid, "add", value);
+  }
 );
 
 export const removeSubject = createAsyncThunk(
   "entities/subject/remove",
-  async ({ value, uid }: UpdateEntityProps) =>
-    await handleUpdate({ value, uid }, "remove", "subject")
+  ({ value, uid }: UpdateEntityProps) => {
+    return handleSubjectUpdate(uid, "remove", value);
+  }
 );
 
 export const addModule = createAsyncThunk(
   "entities/module/add",
-  async ({ entity, subjectIndex, subjectName }: UpdateSubjectModuleProps) => {
-    await handleUpdate(entity, "add", "module", subjectName);
-
-    const updateModule: ModuleUpdateProps = {
-      subjectIndex,
-      entity,
-    };
-
-    return updateModule;
+  ({ entity, subjectIndex, subjectName }: UpdateSubjectModuleProps) => {
+    return handleModuleUpdate(
+      entity.uid,
+      "add",
+      entity.value,
+      subjectName,
+      subjectIndex
+    );
   }
 );
 
 export const removeModule = createAsyncThunk(
   "entities/module/remove",
-  async ({ entity, subjectIndex, subjectName }: UpdateSubjectModuleProps) => {
-    await handleUpdate(entity, "remove", "module", subjectName);
-
-    const deletedModule: ModuleUpdateProps = {
-      subjectIndex,
-      entity,
-    };
-
-    return deletedModule;
+  ({ entity, subjectIndex, subjectName }: UpdateSubjectModuleProps) => {
+    return handleModuleUpdate(
+      entity.uid,
+      "remove",
+      entity.value,
+      subjectName,
+      subjectIndex
+    );
   }
 );
 
@@ -94,16 +129,14 @@ const subjectsSlice = createSlice({
       addModule.fulfilled,
       (state, action: PayloadAction<ModuleUpdateProps>) => {
         const array = state.subjectList;
-        const { subjectIndex, entity } = action.payload;
-        const value = entity.value.toUpperCase();
+        const { subjectIndex, value } = action.payload;
 
         if (array[subjectIndex].modules.indexOf(value) === -1)
           array[subjectIndex].modules.push(value);
       }
     );
     builder.addCase(removeModule.fulfilled, (state, action) => {
-      const { subjectIndex, entity } = action.payload;
-      const value = entity.value.toUpperCase();
+      const { subjectIndex, value } = action.payload;
       const array = state.subjectList[subjectIndex].modules;
       const idx = array.indexOf(value);
 

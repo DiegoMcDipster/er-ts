@@ -1,5 +1,3 @@
-export type EntityType = "GROUP" | "SUBJECT" | "MODULE";
-
 /**
  * Props used by redux & for update to dynamodb
  */
@@ -7,6 +5,12 @@ export type Subject = {
   name: string;
   modules: string[];
 };
+
+export type Subjects = Subject[];
+
+export type Group = string;
+
+export type Groups = Group[];
 
 export type UpdateEntityProps = {
   value: string;
@@ -19,10 +23,10 @@ export type UpdateSubjectModuleProps = {
   subjectName: string;
 };
 
-export type ModuleUpdateProps = Pick<
-  UpdateSubjectModuleProps,
-  "subjectIndex" | "entity"
->;
+export type ModuleUpdateProps = {
+  subjectIndex: number;
+  value: string;
+};
 
 /**
  * Props used by the Entity form
