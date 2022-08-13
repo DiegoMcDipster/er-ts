@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GroupService } from "../../../lib/groupService";
-import { UpdateEntityProps } from "../../../types/stateTypes";
+import { Groups, UpdateEntityProps } from "../../../types/stateTypes";
 
 type InitialState = {
   loading: boolean;
@@ -16,7 +16,7 @@ const initialState: InitialState = {
 
 export const fetchGroups = createAsyncThunk(
   "entities/groups",
-  async (uid: string) => {
+  async (uid: string): Promise<Groups> => {
     const handler = new GroupService(uid);
 
     return await handler.fetchData();

@@ -5,6 +5,7 @@ import { SubjectService } from "../../../lib/subjectService";
 import {
   ModuleUpdateProps,
   Subject,
+  Subjects,
   UpdateEntityProps,
   UpdateSubjectModuleProps,
 } from "../../../types/stateTypes";
@@ -19,7 +20,7 @@ const initialState: InitialState = {
 
 export const fetchSubjects = createAsyncThunk(
   "entities/subjects",
-  async (uid: string) => {
+  async (uid: string): Promise<Subjects> => {
     const handler = new SubjectService(uid);
 
     return await handler.fetchData();

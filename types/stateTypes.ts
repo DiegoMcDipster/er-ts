@@ -6,7 +6,7 @@ export type Subject = {
   modules: string[];
 };
 
-export type Subjects = Subject[];
+export type Subjects = Subject[] | [];
 
 export type Group = string;
 

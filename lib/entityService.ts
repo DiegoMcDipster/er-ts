@@ -1,8 +1,19 @@
+import { AmplifyService } from "./amplifyService";
+
 export type EntityAction = "add" | "remove";
 
 export abstract class EntityService<T> {
   private apiName = "ertsRestApi";
   private uid: string;
+  protected pathname = "";
+  protected params = {};
+  protected entityType = "";
+  protected abstract prepareFetch(): void;
+  protected abstract preparePut(
+    action: string,
+    value: string,
+    subject?: string
+  ): void;
 
   constructor(uid: string) {
     if (!uid) throw new Error("EntityService: a UID must be passed");
@@ -10,18 +21,48 @@ export abstract class EntityService<T> {
     this.uid = uid;
   }
 
-  abstract fetchData(): Promise<T>;
-  abstract putData(
+  async fetchData(): Promise<T> {
+    try {
+      this.prepareFetch();
+
+      const apiHandler = new AmplifyService(this.pathname, this.params);
+      const response = await apiHandler.get();
+
+      return response[`${this.entityType}s`];
+    } catch (error) {
+      console.log("entityService: error: ", error);
+      throw error;
+    }
+  }
+
+  async putData(
     action: EntityAction,
     value: string,
-    subject?: string
-  ): Promise<T>;
+    parentSubject: string = ""
+  ): Promise<T> {
+    if (!value) throw new Error("EntityService: an entity must be passed");
+    if (!action) throw new Error("EntityService: an action must be passed");
 
-  getApiName() {
+    this.preparePut(action, value, parentSubject);
+
+    try {
+      const apiHandler = new AmplifyService(this.pathname, this.params);
+      const response = await apiHandler.put();
+
+      if (response.message.includes("already exists")) throw response.message;
+
+      return response;
+    } catch (error) {
+      console.log("EntityService: The was an error during the put: ", error);
+      throw error;
+    }
+  }
+
+  protected getApiName() {
     return this.apiName;
   }
 
-  getUid() {
+  protected getUid() {
     return this.uid;
   }
 }
