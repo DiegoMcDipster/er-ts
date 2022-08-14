@@ -14,7 +14,11 @@ export class GroupService extends EntityService<Groups> {
     };
   }
 
-  protected preparePut(action: string, value: string, subject = ""): void {
+  protected preparePut(
+    action: string,
+    value: string,
+    parentSubject = ""
+  ): void {
     this.pathname = `/entities/entity/${action}/${value}`;
     this.params = {
       uid: this.getUid(),
