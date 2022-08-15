@@ -12,6 +12,21 @@ export type Group = string;
 
 export type Groups = Group[];
 
+export type GroupGetResponseType = {
+  uid: string;
+  groups: Groups;
+};
+
+export type SubjectGetResponseType = {
+  uid: string;
+  subjects: Subjects;
+};
+
+export type PutResponseType = {
+  message: string;
+  data: Groups | Subjects;
+};
+
 export type UpdateEntityProps = {
   value: string;
   uid: string;

@@ -1,3 +1,10 @@
+import {
+  GroupGetResponseType,
+  Groups,
+  PutResponseType,
+  SubjectGetResponseType,
+  Subjects,
+} from "../types/stateTypes";
 import { AmplifyService } from "./amplifyService";
 
 export type EntityAction = "add" | "remove";
@@ -21,14 +28,17 @@ export abstract class EntityService<T> {
     this.uid = uid;
   }
 
-  async fetchData(): Promise<T> {
+  async fetchData(): Promise<GroupGetResponseType | SubjectGetResponseType> {
     try {
       this.prepareFetch();
 
       const apiHandler = new AmplifyService(this.pathname, this.params);
       const response = await apiHandler.get();
 
-      return response[`${this.entityType}s`];
+      console.log("EntityService: fetch: the response is: ", response);
+
+      // return response[`${this.entityType}s`];
+      return response;
     } catch (error) {
       console.log("entityService: error: ", error);
       throw error;
@@ -39,7 +49,7 @@ export abstract class EntityService<T> {
     action: EntityAction,
     value: string,
     parentSubject: string = ""
-  ): Promise<T> {
+  ): Promise<PutResponseType> {
     if (!value) throw new Error("EntityService: an entity must be passed");
     if (!action) throw new Error("EntityService: an action must be passed");
 
