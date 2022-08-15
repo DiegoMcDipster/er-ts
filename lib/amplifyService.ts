@@ -1,4 +1,20 @@
 import { API } from "aws-amplify";
+import { Groups, Subjects } from "../types/stateTypes";
+
+type GroupGetResponseType = {
+  uid: string;
+  groups: Groups;
+};
+
+type SubjectGetResponseType = {
+  uid: string;
+  subjects: Subjects;
+};
+
+type PutResponseType = {
+  message: string;
+  data: Groups | Subjects;
+};
 
 export class AmplifyService {
   private apiName = "ertsRestApi";
@@ -10,7 +26,7 @@ export class AmplifyService {
     this.queryStringParameters = queryStringParameters;
   }
 
-  async get() {
+  async get(): Promise<GroupGetResponseType | SubjectGetResponseType> {
     try {
       const response = await API.get(this.apiName, this.pathname, {
         queryStringParameters: this.queryStringParameters,
@@ -23,11 +39,13 @@ export class AmplifyService {
     }
   }
 
-  async put() {
+  async put(): Promise<PutResponseType> {
     try {
       const response = await API.put(this.apiName, this.pathname, {
         queryStringParameters: this.queryStringParameters,
       });
+
+      console.log("AmplifyServie: put: the response is: ", response);
 
       return response;
     } catch (error: any) {

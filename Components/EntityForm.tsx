@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { isSubjectModule } from "../types/helpers";
 import { EntityFormProps } from "../types/stateTypes";
 
-const EntityForm = (props: EntityFormProps) => {
+const EntityForm = (props: EntityFormProps): ReactElement => {
   const [value, setValue] = useState("");
   const { label } = props;
 
-  const handleClick = () => {
+  const handleClick = (): void => {
     if (isSubjectModule(props)) {
       const { handler, subjectIndex, subjectName } = props;
       handler(value, subjectIndex, subjectName);

@@ -58,11 +58,11 @@ export abstract class EntityService<T> {
     }
   }
 
-  protected getApiName() {
+  protected getApiName(): string {
     return this.apiName;
   }
 
-  protected getUid() {
+  protected getUid(): string {
     return this.uid;
   }
 }

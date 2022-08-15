@@ -21,9 +21,9 @@ const initialState: InitialState = {
 export const fetchSubjects = createAsyncThunk(
   "entities/subjects",
   async (uid: string): Promise<Subjects> => {
-    const handler = new SubjectService(uid);
+    const service = new SubjectService(uid);
 
-    return await handler.fetchData();
+    return await service.fetchData();
   }
 );
 
@@ -32,9 +32,9 @@ const handleSubjectUpdate = async (
   action: EntityAction,
   value: string
 ): Promise<string> => {
-  const handler = new SubjectService(uid);
+  const service = new SubjectService(uid);
 
-  await handler.putData(action, value);
+  await service.putData(action, value);
 
   return value.toUpperCase();
 };
@@ -46,9 +46,9 @@ const handleModuleUpdate = async (
   parentSubject: string,
   subjectIndex: number
 ): Promise<ModuleUpdateProps> => {
-  const handler = new ModuleService(uid);
+  const service = new ModuleService(uid);
 
-  await handler.putData(action, value, parentSubject);
+  await service.putData(action, value, parentSubject);
 
   const updateModule: ModuleUpdateProps = {
     subjectIndex,
@@ -60,14 +60,14 @@ const handleModuleUpdate = async (
 
 export const addSubject = createAsyncThunk(
   "entities/subject/add",
-  ({ value, uid }: UpdateEntityProps) => {
+  ({ value, uid }: UpdateEntityProps): Promise<string> => {
     return handleSubjectUpdate(uid, "add", value);
   }
 );
 
 export const removeSubject = createAsyncThunk(
   "entities/subject/remove",
-  ({ value, uid }: UpdateEntityProps) => {
+  ({ value, uid }: UpdateEntityProps): Promise<string> => {
     return handleSubjectUpdate(uid, "remove", value);
   }
 );

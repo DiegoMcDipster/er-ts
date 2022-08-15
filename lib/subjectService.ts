@@ -6,7 +6,7 @@ export class SubjectService extends EntityService<Subjects> {
     super(uid);
     this.entityType = "subject";
   }
-  protected prepareFetch() {
+  protected prepareFetch(): void {
     this.pathname = `/entities/${this.entityType}`;
     this.params = {
       uid: this.getUid(),

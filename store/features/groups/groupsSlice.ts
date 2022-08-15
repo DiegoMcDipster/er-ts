@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GroupService } from "../../../lib/groupService";
-import { Groups, UpdateEntityProps } from "../../../types/stateTypes";
+import { Group, Groups, UpdateEntityProps } from "../../../types/stateTypes";
 
 type InitialState = {
   loading: boolean;
@@ -17,18 +17,18 @@ const initialState: InitialState = {
 export const fetchGroups = createAsyncThunk(
   "entities/groups",
   async (uid: string): Promise<Groups> => {
-    const handler = new GroupService(uid);
+    const service = new GroupService(uid);
 
-    return await handler.fetchData();
+    return await service.fetchData();
   }
 );
 
 export const addGroup = createAsyncThunk(
   "entities/group/add",
-  async ({ value, uid }: UpdateEntityProps) => {
-    const handler = new GroupService(uid);
+  async ({ value, uid }: UpdateEntityProps): Promise<Group> => {
+    const service = new GroupService(uid);
 
-    await handler.putData("add", value);
+    await service.putData("add", value);
 
     return value.toUpperCase();
   }
@@ -36,10 +36,10 @@ export const addGroup = createAsyncThunk(
 
 export const removeGroup = createAsyncThunk(
   "entities/group/remove",
-  async ({ value, uid }: UpdateEntityProps) => {
-    const handler = new GroupService(uid);
+  async ({ value, uid }: UpdateEntityProps): Promise<Group> => {
+    const service = new GroupService(uid);
 
-    await handler.putData("remove", value);
+    await service.putData("remove", value);
 
     return value.toUpperCase();
   }
@@ -52,21 +52,21 @@ const groupsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       addGroup.fulfilled,
-      (state, action: PayloadAction<string>) => {
+      (state, action: PayloadAction<Group>) => {
         state.groupsList.push(action.payload);
       }
     );
 
     builder.addCase(
       removeGroup.fulfilled,
-      (state, action: PayloadAction<string>) => {
+      (state, action: PayloadAction<Group>) => {
         state.groupsList.splice(state.groupsList.indexOf(action.payload), 1);
       }
     );
 
     builder.addCase(
       fetchGroups.fulfilled,
-      (state, action: PayloadAction<string[]>) => {
+      (state, action: PayloadAction<Groups>) => {
         state.loading = false;
         state.groupsList = action.payload;
         state.error = "";
