@@ -6,21 +6,17 @@ export class SubjectService extends EntityService<Subjects> {
     super(uid);
     this.entityType = "subject";
   }
-  protected prepareFetch(): void {
+  protected setFecthParams(): void {
     this.pathname = `/entities/${this.entityType}`;
     this.params = {
-      uid: this.getUid(),
+      uid: this.uid,
     };
   }
 
-  protected preparePut(
-    action: string,
-    value: string,
-    parentSubject: string
-  ): void {
+  protected setPutParams(action: string, value: string): void {
     this.pathname = `/entities/subject/${action}/${value}`;
     this.params = {
-      uid: this.getUid(),
+      uid: this.uid,
       entityType: this.entityType,
     };
   }

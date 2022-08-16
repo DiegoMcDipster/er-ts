@@ -25,11 +25,9 @@ export const fetchGroups = createAsyncThunk(
   async (uid: string): Promise<Groups> => {
     const service = new GroupService(uid);
 
-    const result = await service.fetchData();
+    return await service.fetchData();
 
-    if (isGroupResults(result)) return result.groups;
-
-    return [];
+    // if (isGroupResults(result)) return result.groups;
   }
 );
 

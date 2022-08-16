@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { EntityAction } from "../../../lib/entityService";
 import { ModuleService } from "../../../lib/moduleService";
 import { SubjectService } from "../../../lib/subjectService";
-import { isSubjectResults } from "../../../types/helpers";
 import {
   ModuleUpdateProps,
   Subject,
@@ -24,11 +23,7 @@ export const fetchSubjects = createAsyncThunk(
   async (uid: string): Promise<Subjects> => {
     const service = new SubjectService(uid);
 
-    const result = await service.fetchData();
-
-    if (isSubjectResults(result)) return result.subjects;
-
-    return [];
+    return await service.fetchData();
   }
 );
 
@@ -51,9 +46,9 @@ const handleModuleUpdate = async (
   parentSubject: string,
   subjectIndex: number
 ): Promise<ModuleUpdateProps> => {
-  const service = new ModuleService(uid);
+  const service = new ModuleService(uid, parentSubject);
 
-  await service.putData(action, value, parentSubject);
+  await service.putData(action, value);
 
   const updateModule: ModuleUpdateProps = {
     subjectIndex,

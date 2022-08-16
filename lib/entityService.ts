@@ -1,62 +1,49 @@
-import {
-  GroupGetResponseType,
-  Groups,
-  PutResponseType,
-  SubjectGetResponseType,
-  Subjects,
-} from "../types/stateTypes";
 import { AmplifyService } from "./amplifyService";
 
 export type EntityAction = "add" | "remove";
 
 export abstract class EntityService<T> {
-  private apiName = "ertsRestApi";
-  private uid: string;
-  protected pathname = "";
-  protected params = {};
-  protected entityType = "";
-  protected abstract prepareFetch(): void;
-  protected abstract preparePut(
-    action: string,
-    value: string,
-    subject?: string
-  ): void;
+  private readonly _apiName = "ertsRestApi";
+  private _pathname?: string;
+  private _params?: object;
+  protected entityType?: string;
+  protected abstract setFecthParams(): void;
+  protected abstract setPutParams(action: string, value: string): void;
 
-  constructor(uid: string) {
-    if (!uid) throw new Error("EntityService: a UID must be passed");
+  constructor(private readonly _uid: string) {}
 
-    this.uid = uid;
-  }
-
-  async fetchData(): Promise<GroupGetResponseType | SubjectGetResponseType> {
+  async fetchData() {
     try {
-      this.prepareFetch();
+      this.setFecthParams();
 
-      const apiHandler = new AmplifyService(this.pathname, this.params);
+      if (!this._pathname)
+        throw "EntityService: A pathname must be provided for the fetch";
+      if (!this._params)
+        throw "EntityService: A params object must be provided for the fetch";
+
+      const apiHandler = new AmplifyService(this._pathname, this._params);
       const response = await apiHandler.get();
 
-      console.log("EntityService: fetch: the response is: ", response);
-
-      // return response[`${this.entityType}s`];
-      return response;
+      return response[`${this.entityType}s`];
     } catch (error) {
       console.log("entityService: error: ", error);
       throw error;
     }
   }
 
-  async putData(
-    action: EntityAction,
-    value: string,
-    parentSubject: string = ""
-  ): Promise<PutResponseType> {
+  async putData(action: EntityAction, value: string) {
     if (!value) throw new Error("EntityService: an entity must be passed");
     if (!action) throw new Error("EntityService: an action must be passed");
 
-    this.preparePut(action, value, parentSubject);
+    this.setPutParams(action, value);
+
+    if (!this._pathname)
+      throw "EntityService: A pathname must be provided for the fetch";
+    if (!this._params)
+      throw "EntityService: A params object must be provided for the fetch";
 
     try {
-      const apiHandler = new AmplifyService(this.pathname, this.params);
+      const apiHandler = new AmplifyService(this._pathname, this._params);
       const response = await apiHandler.put();
 
       if (response.message.includes("already exists")) throw response.message;
@@ -68,11 +55,21 @@ export abstract class EntityService<T> {
     }
   }
 
-  protected getApiName(): string {
-    return this.apiName;
+  protected set pathname(value: string) {
+    if (!value) throw "EntityService: an invalid pathname value cannot be set";
+    this._pathname = value;
   }
 
-  protected getUid(): string {
-    return this.uid;
+  protected set params(value: object) {
+    if (!value) throw "EntityService: and invalid params object cannot be set";
+    this._params = value;
+  }
+
+  protected get apiName() {
+    return this._apiName;
+  }
+
+  protected get uid(): string {
+    return this._uid;
   }
 }
