@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GroupService } from "../../../lib/groupService";
-import { isGroupResults } from "../../../types/helpers";
 import {
   Group,
-  GroupGetResponseType,
   Groups,
+  PutResponseType,
+  Uid,
   UpdateEntityProps,
 } from "../../../types/stateTypes";
 
@@ -22,21 +22,19 @@ const initialState: InitialState = {
 
 export const fetchGroups = createAsyncThunk(
   "entities/groups",
-  async (uid: string): Promise<Groups> => {
-    const service = new GroupService(uid);
+  async (uid: Uid): Promise<Groups> => {
+    const service = new GroupService<Uid, Groups>(uid);
 
     return await service.fetchData();
-
-    // if (isGroupResults(result)) return result.groups;
   }
 );
 
 export const addGroup = createAsyncThunk(
   "entities/group/add",
   async ({ value, uid }: UpdateEntityProps): Promise<Group> => {
-    const service = new GroupService(uid);
+    const service = new GroupService<Uid, Groups>(uid);
 
-    await service.putData("add", value);
+    await service.putData<PutResponseType>("add", value);
 
     return value.toUpperCase();
   }
@@ -45,9 +43,9 @@ export const addGroup = createAsyncThunk(
 export const removeGroup = createAsyncThunk(
   "entities/group/remove",
   async ({ value, uid }: UpdateEntityProps): Promise<Group> => {
-    const service = new GroupService(uid);
+    const service = new GroupService<Uid, Groups>(uid);
 
-    await service.putData("remove", value);
+    await service.putData<PutResponseType>("remove", value);
 
     return value.toUpperCase();
   }

@@ -1,18 +1,25 @@
+import {
+  EntityAction,
+  EntityType,
+  GetResponseType,
+  Group,
+  Groups,
+  Subjects,
+} from "../types/stateTypes";
 import { AmplifyService } from "./amplifyService";
 
-export type EntityAction = "add" | "remove";
-
-export abstract class EntityService<T> {
+export abstract class EntityService<U, R> {
   private readonly _apiName = "ertsRestApi";
   private _pathname?: string;
   private _params?: object;
-  protected entityType?: string;
+  protected entityType?: EntityType;
   protected abstract setFecthParams(): void;
-  protected abstract setPutParams(action: string, value: string): void;
+  protected abstract setPutParams(action: EntityAction, value: string): void;
+  protected abstract setDataToReturn(response: GetResponseType): R | [];
 
-  constructor(private readonly _uid: string) {}
+  constructor(private readonly _uid: U) {}
 
-  async fetchData() {
+  async fetchData(): Promise<R | []> {
     try {
       this.setFecthParams();
 
@@ -22,16 +29,16 @@ export abstract class EntityService<T> {
         throw "EntityService: A params object must be provided for the fetch";
 
       const apiHandler = new AmplifyService(this._pathname, this._params);
-      const response = await apiHandler.get();
+      const response = await apiHandler.get<GetResponseType>();
 
-      return response[`${this.entityType}s`];
+      return this.setDataToReturn(response);
     } catch (error) {
       console.log("entityService: error: ", error);
       throw error;
     }
   }
 
-  async putData(action: EntityAction, value: string) {
+  async putData<R>(action: EntityAction, value: string): Promise<R> {
     if (!value) throw new Error("EntityService: an entity must be passed");
     if (!action) throw new Error("EntityService: an action must be passed");
 
@@ -69,7 +76,7 @@ export abstract class EntityService<T> {
     return this._apiName;
   }
 
-  protected get uid(): string {
+  protected get uid(): U {
     return this._uid;
   }
 }

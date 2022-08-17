@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { EntityAction } from "../../../lib/entityService";
 import { ModuleService } from "../../../lib/moduleService";
 import { SubjectService } from "../../../lib/subjectService";
 import {
-  ModuleUpdateProps,
+  EntityAction,
+  ModuleStoreProps,
+  PutResponseType,
   Subject,
   Subjects,
+  Uid,
   UpdateEntityProps,
   UpdateSubjectModuleProps,
 } from "../../../types/stateTypes";
@@ -20,37 +22,37 @@ const initialState: InitialState = {
 
 export const fetchSubjects = createAsyncThunk(
   "entities/subjects",
-  async (uid: string): Promise<Subjects> => {
-    const service = new SubjectService(uid);
+  async (uid: Uid): Promise<Subjects> => {
+    const service = new SubjectService<Uid, Subjects>(uid);
 
     return await service.fetchData();
   }
 );
 
 const handleSubjectUpdate = async (
-  uid: string,
+  uid: Uid,
   action: EntityAction,
   value: string
 ): Promise<string> => {
-  const service = new SubjectService(uid);
+  const service = new SubjectService<Uid, Subjects>(uid);
 
-  await service.putData(action, value);
+  await service.putData<PutResponseType>(action, value);
 
   return value.toUpperCase();
 };
 
 const handleModuleUpdate = async (
-  uid: string,
+  uid: Uid,
   action: EntityAction,
   value: string,
   parentSubject: string,
   subjectIndex: number
-): Promise<ModuleUpdateProps> => {
-  const service = new ModuleService(uid, parentSubject);
+): Promise<ModuleStoreProps> => {
+  const service = new ModuleService<Uid, Subjects>(uid, parentSubject);
 
-  await service.putData(action, value);
+  await service.putData<PutResponseType>(action, value);
 
-  const updateModule: ModuleUpdateProps = {
+  const updateModule: ModuleStoreProps = {
     subjectIndex,
     value: value.toUpperCase(),
   };
@@ -128,7 +130,7 @@ const subjectsSlice = createSlice({
     );
     builder.addCase(
       addModule.fulfilled,
-      (state, action: PayloadAction<ModuleUpdateProps>) => {
+      (state, action: PayloadAction<ModuleStoreProps>) => {
         const array = state.subjectList;
         const { subjectIndex, value } = action.payload;
 

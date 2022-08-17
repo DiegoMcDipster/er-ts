@@ -1,25 +1,27 @@
 /**
  * Props used by redux & for update to dynamodb
  */
+export type Uid = string;
+
 export type Subject = {
   name: string;
   modules: string[];
 };
 
-export type Subjects = Subject[] | [];
+export type Subjects = Subject[];
 
 export type Group = string;
 
 export type Groups = Group[];
 
-export type GroupGetResponseType = {
-  uid: string;
-  groups: Groups;
-};
+export type EntityAction = "add" | "remove";
 
-export type SubjectGetResponseType = {
-  uid: string;
-  subjects: Subjects;
+export type EntityType = "group" | "subject" | "module";
+
+export type GetResponseType = {
+  uid: Uid;
+  groups: Groups | undefined;
+  subjects: Subjects | undefined;
 };
 
 export type PutResponseType = {
@@ -29,7 +31,7 @@ export type PutResponseType = {
 
 export type UpdateEntityProps = {
   value: string;
-  uid: string;
+  uid: Uid;
 };
 
 export type UpdateSubjectModuleProps = {
@@ -38,7 +40,7 @@ export type UpdateSubjectModuleProps = {
   subjectName: string;
 };
 
-export type ModuleUpdateProps = {
+export type ModuleStoreProps = {
   subjectIndex: number;
   value: string;
 };

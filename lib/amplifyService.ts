@@ -8,7 +8,7 @@ export class AmplifyService {
     private readonly _queryStringParameters: object
   ) {}
 
-  async get() {
+  async get<E>(): Promise<E> {
     try {
       const response = await API.get(this._apiName, this._pathname, {
         queryStringParameters: this._queryStringParameters,

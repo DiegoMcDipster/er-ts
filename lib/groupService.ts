@@ -1,8 +1,8 @@
-import { Groups } from "../types/stateTypes";
+import { EntityAction, GetResponseType, Groups } from "../types/stateTypes";
 import { EntityService } from "./entityService";
 
-export class GroupService extends EntityService<Groups> {
-  constructor(uid: string) {
+export class GroupService<U, R> extends EntityService<U, R> {
+  constructor(uid: U) {
     super(uid);
     this.entityType = "group";
   }
@@ -14,11 +14,19 @@ export class GroupService extends EntityService<Groups> {
     };
   }
 
-  protected setPutParams(action: string, value: string): void {
+  protected setPutParams(action: EntityAction, value: string): void {
     this.pathname = `/entities/entity/${action}/${value}`;
     this.params = {
       uid: this.uid,
       entityType: this.entityType,
     };
+  }
+
+  protected setDataToReturn(response: GetResponseType): R | [] {
+    if (response.groups !== undefined) {
+      return response.groups as unknown as R;
+    }
+
+    return [];
   }
 }
