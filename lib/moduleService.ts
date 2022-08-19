@@ -11,7 +11,7 @@ export class ModuleService<U, R> extends EntityService<U, R> {
     throw "Modules cannot be fetched. They are fetched by Subject";
   }
 
-  protected setDataToReturn(response: GetResponseType): R | [] {
+  protected setDataToReturn(response: GetResponseType): R {
     throw "Modules cannot be fetched. They are fetched by Subject";
   }
 

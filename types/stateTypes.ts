@@ -20,13 +20,13 @@ export type EntityType = "group" | "subject" | "module";
 
 export type GetResponseType = {
   uid: Uid;
-  groups: Groups | undefined;
-  subjects: Subjects | undefined;
+  groups: Groups | unknown;
+  subjects: Subjects | unknown;
 };
 
 export type PutResponseType = {
   message: string;
-  data: Groups | Subjects;
+  data: Groups | Subjects | unknown;
 };
 
 export type UpdateEntityProps = {

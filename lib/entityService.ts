@@ -4,6 +4,7 @@ import {
   GetResponseType,
   Group,
   Groups,
+  PutResponseType,
   Subjects,
 } from "../types/stateTypes";
 import { AmplifyService } from "./amplifyService";
@@ -15,11 +16,11 @@ export abstract class EntityService<U, R> {
   protected entityType?: EntityType;
   protected abstract setFecthParams(): void;
   protected abstract setPutParams(action: EntityAction, value: string): void;
-  protected abstract setDataToReturn(response: GetResponseType): R | [];
+  protected abstract setDataToReturn(response: GetResponseType): R;
 
   constructor(private readonly _uid: U) {}
 
-  async fetchData(): Promise<R | []> {
+  async fetchData(): Promise<R> {
     try {
       this.setFecthParams();
 
@@ -51,11 +52,13 @@ export abstract class EntityService<U, R> {
 
     try {
       const apiHandler = new AmplifyService(this._pathname, this._params);
-      const response = await apiHandler.put();
+      const response = await apiHandler.put<PutResponseType>();
+
+      console.log("The put response is: ", response);
 
       if (response.message.includes("already exists")) throw response.message;
 
-      return response;
+      return response as unknown as R;
     } catch (error) {
       console.log("EntityService: The was an error during the put: ", error);
       throw error;

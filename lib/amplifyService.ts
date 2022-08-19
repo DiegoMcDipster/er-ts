@@ -10,7 +10,7 @@ export class AmplifyService {
 
   async get<E>(): Promise<E> {
     try {
-      const response = await API.get(this._apiName, this._pathname, {
+      const response: E = await API.get(this._apiName, this._pathname, {
         queryStringParameters: this._queryStringParameters,
       });
 
@@ -21,9 +21,9 @@ export class AmplifyService {
     }
   }
 
-  async put() {
+  async put<R>(): Promise<R> {
     try {
-      const response = await API.put(this._apiName, this._pathname, {
+      const response: R = await API.put(this._apiName, this._pathname, {
         queryStringParameters: this._queryStringParameters,
       });
 

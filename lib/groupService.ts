@@ -1,3 +1,4 @@
+import { getProperty } from "../types/helpers";
 import { EntityAction, GetResponseType, Groups } from "../types/stateTypes";
 import { EntityService } from "./entityService";
 
@@ -22,11 +23,7 @@ export class GroupService<U, R> extends EntityService<U, R> {
     };
   }
 
-  protected setDataToReturn(response: GetResponseType): R | [] {
-    if (response.groups !== undefined) {
-      return response.groups as unknown as R;
-    }
-
-    return [];
+  protected setDataToReturn(response: GetResponseType): R {
+    return getProperty(response, "groups") as R;
   }
 }

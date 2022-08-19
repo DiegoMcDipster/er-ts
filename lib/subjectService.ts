@@ -1,3 +1,4 @@
+import { getProperty } from "../types/helpers";
 import { EntityAction, GetResponseType } from "../types/stateTypes";
 import { EntityService } from "./entityService";
 
@@ -21,11 +22,7 @@ export class SubjectService<U, R> extends EntityService<U, R> {
     };
   }
 
-  protected setDataToReturn(response: GetResponseType): R | [] {
-    if (response.subjects !== undefined) {
-      return response.subjects as unknown as R;
-    }
-
-    return [];
+  protected setDataToReturn(response: GetResponseType): R {
+    return getProperty(response, "subjects") as R;
   }
 }
