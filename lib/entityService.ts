@@ -2,76 +2,74 @@ import {
   EntityAction,
   EntityType,
   GetResponseType,
-  Group,
-  Groups,
   PutResponseType,
-  Subjects,
 } from "../types/stateTypes";
 import { AmplifyService } from "./amplifyService";
+import { FieldVerification } from "./FieldVerification";
 
 export abstract class EntityService<U, R> {
   private readonly _apiName = "ertsRestApi";
-  private _pathname?: string;
-  private _params?: object;
-  protected entityType?: EntityType;
+  private _pathname!: string;
+  private _params!: object;
+  protected entityType!: EntityType;
   protected abstract setFecthParams(): void;
   protected abstract setPutParams(action: EntityAction, value: string): void;
   protected abstract setDataToReturn(response: GetResponseType): R;
+  protected verifier: FieldVerification;
 
-  constructor(private readonly _uid: U) {}
+  constructor(private readonly _uid: U) {
+    this.verifier = new FieldVerification();
+  }
 
   async fetchData(): Promise<R> {
     try {
       this.setFecthParams();
 
-      if (!this._pathname)
-        throw "EntityService: A pathname must be provided for the fetch";
-      if (!this._params)
-        throw "EntityService: A params object must be provided for the fetch";
+      this.verifier.verifyField(this._pathname, "pathname", "fetch");
+      this.verifier.verifyField(this._params, "params", "fetch");
 
       const apiHandler = new AmplifyService(this._pathname, this._params);
       const response = await apiHandler.get<GetResponseType>();
 
       return this.setDataToReturn(response);
     } catch (error) {
-      console.log("entityService: error: ", error);
+      console.log(
+        "EntityService: There was an Error during the fetch: ",
+        error
+      );
       throw error;
     }
   }
 
   async putData<R>(action: EntityAction, value: string): Promise<R> {
-    if (!value) throw new Error("EntityService: an entity must be passed");
-    if (!action) throw new Error("EntityService: an action must be passed");
+    this.verifier.verifyField(value, "value", "put");
+    this.verifier.verifyField(action, "action", "put");
 
     this.setPutParams(action, value);
 
-    if (!this._pathname)
-      throw "EntityService: A pathname must be provided for the fetch";
-    if (!this._params)
-      throw "EntityService: A params object must be provided for the fetch";
+    this.verifier.verifyField(this._pathname, "pathname", "put");
+    this.verifier.verifyField(this._params, "params", "put");
 
     try {
       const apiHandler = new AmplifyService(this._pathname, this._params);
       const response = await apiHandler.put<PutResponseType>();
 
-      console.log("The put response is: ", response);
-
       if (response.message.includes("already exists")) throw response.message;
 
       return response as unknown as R;
     } catch (error) {
-      console.log("EntityService: The was an error during the put: ", error);
+      console.log("EntityService: There was an error during the put: ", error);
       throw error;
     }
   }
 
   protected set pathname(value: string) {
-    if (!value) throw "EntityService: an invalid pathname value cannot be set";
+    this.verifier.verifyField(value, "pathname", "set");
     this._pathname = value;
   }
 
   protected set params(value: object) {
-    if (!value) throw "EntityService: and invalid params object cannot be set";
+    this.verifier.verifyField(value, "params", "set");
     this._params = value;
   }
 

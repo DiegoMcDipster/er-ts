@@ -1,5 +1,5 @@
 import { getProperty } from "../types/helpers";
-import { EntityAction, GetResponseType, Groups } from "../types/stateTypes";
+import { EntityAction, GetResponseType } from "../types/stateTypes";
 import { EntityService } from "./entityService";
 
 export class GroupService<U, R> extends EntityService<U, R> {
