@@ -53,29 +53,32 @@ export const SubjectsView = () => {
       <div>
         <h2>Subjects</h2>
         <ol>
-          {subjects.map((item, index) => (
-            <li key={index} data-cy={`subject-${index}`}>
-              {item.name}
-              <DeleteIcon handler={() => handleRemoveSubject(item.name)} />
-              <ul>
-                {item.modules.map((mod, i) => (
-                  <li key={i} data-cy={`module-${index}-${i}`}>
-                    {mod}
-                    <DeleteIcon
-                      handler={() => handleRemoveModule(mod, index, item.name)}
-                    />
-                  </li>
-                ))}
-              </ul>
-              <br />
-              <EntityForm
-                handler={handleAddModule}
-                label="Add Module New"
-                subjectIndex={index}
-                subjectName={item.name}
-              />
-            </li>
-          ))}
+          {subjects &&
+            subjects.map((item, index) => (
+              <li key={index} data-cy={`subject-${index}`}>
+                {item.name}
+                <DeleteIcon handler={() => handleRemoveSubject(item.name)} />
+                <ul>
+                  {item.modules.map((mod, i) => (
+                    <li key={i} data-cy={`module-${index}-${i}`}>
+                      {mod}
+                      <DeleteIcon
+                        handler={() =>
+                          handleRemoveModule(mod, index, item.name)
+                        }
+                      />
+                    </li>
+                  ))}
+                </ul>
+                <br />
+                <EntityForm
+                  handler={handleAddModule}
+                  label="Add Module New"
+                  subjectIndex={index}
+                  subjectName={item.name}
+                />
+              </li>
+            ))}
         </ol>
       </div>
       <br />

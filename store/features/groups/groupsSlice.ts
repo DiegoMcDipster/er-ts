@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GroupService } from "../../../lib/groupService";
+import { AmplifyService } from "../../../lib/AmplifyService";
+import { ApiHandler } from "../../../lib/ApiHandler";
+import { getProperty } from "../../../types/helpers";
 import {
+  GetResponseType,
   Group,
   Groups,
   PutResponseType,
@@ -20,34 +23,64 @@ const initialState: InitialState = {
   error: "",
 };
 
+const handler = new ApiHandler(new AmplifyService());
+
 export const fetchGroups = createAsyncThunk(
   "entities/groups",
   async (uid: Uid): Promise<Groups> => {
-    const service = new GroupService<Uid, Groups>(uid);
+    try {
+      const pathname = "/entities/group";
+      const params = {
+        uid,
+      };
+      const response = await handler.get<GetResponseType>(pathname, params);
 
-    return await service.fetchData();
+      return getProperty(response, "groups") as Groups;
+    } catch (error) {
+      console.log("fetchGroups: error: ", error);
+      throw error;
+    }
   }
 );
 
 export const addGroup = createAsyncThunk(
   "entities/group/add",
   async ({ value, uid }: UpdateEntityProps): Promise<Group> => {
-    const service = new GroupService<Uid, Groups>(uid);
+    try {
+      const pathname = `/entities/entity/add/${value}`;
+      const params = {
+        uid: uid,
+        entityType: "group",
+      };
 
-    await service.putData<PutResponseType>("add", value);
+      const response = await handler.put<PutResponseType>(pathname, params);
 
-    return value.toUpperCase();
+      if (response.message.includes("already exists")) throw response.message;
+      return value.toUpperCase();
+    } catch (error) {
+      console.log("addGroup: error - ", error);
+      throw error;
+    }
   }
 );
 
 export const removeGroup = createAsyncThunk(
   "entities/group/remove",
   async ({ value, uid }: UpdateEntityProps): Promise<Group> => {
-    const service = new GroupService<Uid, Groups>(uid);
+    try {
+      const pathname = `/entities/entity/remove/${value}`;
+      const params = {
+        uid: uid,
+        entityType: "group",
+      };
 
-    await service.putData<PutResponseType>("remove", value);
+      await handler.put<PutResponseType>(pathname, params);
 
-    return value.toUpperCase();
+      return value.toUpperCase();
+    } catch (error) {
+      console.log("removeGroup: error - ", error);
+      throw error;
+    }
   }
 );
 

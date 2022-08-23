@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ModuleService } from "../../../lib/moduleService";
-import { SubjectService } from "../../../lib/subjectService";
+import { AmplifyService } from "../../../lib/AmplifyService";
+import { ApiHandler } from "../../../lib/ApiHandler";
+import { getProperty } from "../../../types/helpers";
 import {
   EntityAction,
+  GetResponseType,
   ModuleStoreProps,
   PutResponseType,
   Subject,
@@ -20,12 +22,23 @@ const initialState: InitialState = {
   subjectList: [],
 };
 
+const handler = new ApiHandler(new AmplifyService());
+
 export const fetchSubjects = createAsyncThunk(
   "entities/subjects",
   async (uid: Uid): Promise<Subjects> => {
-    const service = new SubjectService<Uid, Subjects>(uid);
+    try {
+      const pathname = "/entities/subject";
+      const params = {
+        uid,
+      };
+      const response = await handler.get<GetResponseType>(pathname, params);
 
-    return await service.fetchData();
+      return getProperty(response, "subjects") as Subjects;
+    } catch (error) {
+      console.log("fetchSubjects: error: ", error);
+      throw error;
+    }
   }
 );
 
@@ -34,11 +47,21 @@ const handleSubjectUpdate = async (
   action: EntityAction,
   value: string
 ): Promise<string> => {
-  const service = new SubjectService<Uid, Subjects>(uid);
+  try {
+    const pathname = `/entities/subject/${action}/${value}`;
+    const params = {
+      uid: uid,
+      entityType: "subject",
+    };
 
-  await service.putData<PutResponseType>(action, value);
+    const response = await handler.put<PutResponseType>(pathname, params);
 
-  return value.toUpperCase();
+    if (response.message.includes("already exists")) throw response.message;
+    return value.toUpperCase();
+  } catch (error) {
+    console.log("handleSubjectUpdate: error - ", error);
+    throw error;
+  }
 };
 
 const handleModuleUpdate = async (
@@ -48,16 +71,28 @@ const handleModuleUpdate = async (
   parentSubject: string,
   subjectIndex: number
 ): Promise<ModuleStoreProps> => {
-  const service = new ModuleService<Uid, Subjects>(uid, parentSubject);
+  try {
+    const pathname = `/entities/subject/modules/${action}/${value}`;
+    const params = {
+      uid,
+      entityType: "module",
+      parentSubject: parentSubject,
+    };
 
-  await service.putData<PutResponseType>(action, value);
+    const response = await handler.put<PutResponseType>(pathname, params);
 
-  const updateModule: ModuleStoreProps = {
-    subjectIndex,
-    value: value.toUpperCase(),
-  };
+    if (response.message.includes("already exists")) throw response.message;
 
-  return updateModule;
+    const updateModule: ModuleStoreProps = {
+      subjectIndex,
+      value: value.toUpperCase(),
+    };
+
+    return updateModule;
+  } catch (error) {
+    console.log("handleMoculeUpdate: error - ", error);
+    throw error;
+  }
 };
 
 export const addSubject = createAsyncThunk(

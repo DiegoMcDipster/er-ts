@@ -1,28 +1,26 @@
 import { API } from "aws-amplify";
+import { ApiService } from "./apiService";
 import { FieldVerification } from "./FieldVerification";
 
-export class AmplifyService {
+export class AmplifyService implements ApiService {
   private readonly _apiName = "ertsRestApi";
   private verifier: FieldVerification;
 
-  constructor(
-    private readonly _pathname: string,
-    private readonly _queryStringParameters: object
-  ) {
+  constructor() {
     this.verifier = new FieldVerification();
   }
 
-  async get<E>(): Promise<E> {
+  async get<E>(pathname: string, queryStringParameters: object): Promise<E> {
     try {
-      this.verifier.verifyField(this._pathname, "pathname", "get");
+      this.verifier.verifyField(pathname, "pathname", "get");
       this.verifier.verifyField(
-        this._queryStringParameters,
+        queryStringParameters,
         "queryStringParameters",
         "get"
       );
 
-      const response: E = await API.get(this._apiName, this._pathname, {
-        queryStringParameters: this._queryStringParameters,
+      const response: E = await API.get(this._apiName, pathname, {
+        queryStringParameters,
       });
 
       return response;
@@ -32,17 +30,17 @@ export class AmplifyService {
     }
   }
 
-  async put<R>(): Promise<R> {
+  async put<R>(pathname: string, queryStringParameters: object): Promise<R> {
     try {
-      this.verifier.verifyField(this._pathname, "pathname", "put");
+      this.verifier.verifyField(pathname, "pathname", "put");
       this.verifier.verifyField(
-        this._queryStringParameters,
+        queryStringParameters,
         "queryStringParameters",
         "get"
       );
 
-      const response: R = await API.put(this._apiName, this._pathname, {
-        queryStringParameters: this._queryStringParameters,
+      const response: R = await API.put(this._apiName, pathname, {
+        queryStringParameters,
       });
 
       return response;

@@ -7,6 +7,7 @@ const EntityForm = (props: EntityFormProps): ReactElement => {
   const { label } = props;
 
   const handleClick = (): void => {
+    if (!value) return;
     if (isSubjectModule(props)) {
       const { handler, subjectIndex, subjectName } = props;
       handler(value, subjectIndex, subjectName);
