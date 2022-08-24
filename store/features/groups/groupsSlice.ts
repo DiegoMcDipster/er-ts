@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AmplifyService } from "../../../lib/AmplifyService";
-import { ApiHandler } from "../../../lib/ApiHandler";
 import { getProperty } from "../../../types/helpers";
 import {
   GetResponseType,
@@ -23,7 +22,7 @@ const initialState: InitialState = {
   error: "",
 };
 
-const handler = new ApiHandler(new AmplifyService());
+const handler = new AmplifyService();
 
 export const fetchGroups = createAsyncThunk(
   "entities/groups",

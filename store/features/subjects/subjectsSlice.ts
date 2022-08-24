@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AmplifyService } from "../../../lib/AmplifyService";
-import { ApiHandler } from "../../../lib/ApiHandler";
 import { getProperty } from "../../../types/helpers";
 import {
   EntityAction,
@@ -22,7 +21,7 @@ const initialState: InitialState = {
   subjectList: [],
 };
 
-const handler = new ApiHandler(new AmplifyService());
+const handler = new AmplifyService();
 
 export const fetchSubjects = createAsyncThunk(
   "entities/subjects",
