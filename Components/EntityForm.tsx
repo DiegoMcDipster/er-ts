@@ -17,14 +17,15 @@ const EntityForm = (props: EntityFormProps): ReactElement => {
   };
 
   return (
-    <div>
+    <div className={`form ${props.isActive ? "expanded" : ""}`}>
       <input
+        className="form_input"
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         data-cy="input-field"
       />
-      <button onClick={handleClick} data-cy="submit-btn">
+      <button className="btn" onClick={handleClick} data-cy="submit-btn">
         {label}
       </button>
     </div>

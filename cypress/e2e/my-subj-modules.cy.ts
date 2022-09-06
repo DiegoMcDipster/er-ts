@@ -1,4 +1,5 @@
 import {
+  addBtnSelector,
   deleteIconSelector,
   inputFieldSelector,
   submitBtnSelector,
@@ -11,14 +12,31 @@ describe("My Subject and Modules page", () => {
     cy.visit("/my-subj-modules");
   });
 
+  const subjectVisibilityCheck = (check: string): void => {
+    cy.get(inputFieldSelector).should(check);
+    cy.get(submitBtnSelector).should(check);
+  };
+
   it("displays correctly", () => {
     cy.get("h1").should("contain", "My Subjects and Modules");
 
     cy.get(subjectSelector).should("not.exist");
-    cy.get(inputFieldSelector).should("be.visible");
-    cy.get(submitBtnSelector).should("be.visible");
+    subjectVisibilityCheck("not.be.visible");
   });
+  it("toggles the visibility of the form when the Add Subject button is clicked", () => {
+    cy.get(addBtnSelector).click().should("contain", "Cancel");
+
+    subjectVisibilityCheck("be.visible");
+    cy.get(addBtnSelector).click().should("contain", "Add Subject");
+    subjectVisibilityCheck("not.be.visible");
+  });
+
   context("Adding and Removing Subjects and Modules", () => {
+    const moduleVisibilityCheck = (check: string): void => {
+      cy.get("@maths").find(inputFieldSelector).should(check);
+      cy.get("@maths").find(submitBtnSelector).should(check);
+    };
+
     it("adds the subject Maths", () => {
       const subjectMaths = "maths";
 
@@ -41,9 +59,11 @@ describe("My Subject and Modules page", () => {
         .find(deleteIconSelector)
         .should("be.visible");
 
-      cy.get("@maths").find(inputFieldSelector).should("exist");
+      moduleVisibilityCheck("not.be.visible");
 
-      cy.get("@maths").find(submitBtnSelector).should("exist");
+      cy.get("@maths").find("[data-cy=add-icon]").click();
+
+      moduleVisibilityCheck("be.visible");
 
       // Add a module for maths
       const trigonometry = "Trigonometry";

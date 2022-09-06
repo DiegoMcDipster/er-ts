@@ -1,30 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import EntityForm from "../../../Components/EntityForm";
-import { DeleteIcon } from "../../../Components/Icons";
+import { AddIcon, CloseIcon, DeleteIcon } from "../../../Components/Icons";
 import { useAppDispatch, useAppSelector } from "../../hook";
 import {
   addModule,
-  addSubject,
   fetchSubjects,
   removeModule,
   removeSubject,
 } from "./subjectsSlice";
+import { UpdateEntityProps } from "../../../types/stateTypes";
 
 // This constant is only here for demo pruposes
 import { UID } from "../../../demo-const";
-import { UpdateEntityProps } from "../../../types/stateTypes";
 
 export const SubjectsView = () => {
+  const [isActive, setIsActive] = useState<boolean>(false);
+
   const dispatch = useAppDispatch();
   const subjects = useAppSelector((state) => state.subjects.subjectList);
 
   useEffect(() => {
     dispatch(fetchSubjects(UID));
   }, [dispatch]);
-
-  const handleAddSubject = (value: string) => {
-    dispatch(addSubject({ value, uid: UID }));
-  };
 
   const handleRemoveSubject = (value: string) => {
     dispatch(removeSubject({ value, uid: UID }));
@@ -51,16 +48,41 @@ export const SubjectsView = () => {
   return (
     <div>
       <div>
-        <h2>Subjects</h2>
-        <ol>
+        <h3>Current Subjects</h3>
+        <ul>
           {subjects &&
             subjects.map((item, index) => (
-              <li key={index} data-cy={`subject-${index}`}>
-                {item.name}
-                <DeleteIcon handler={() => handleRemoveSubject(item.name)} />
+              <li
+                className="entity subject"
+                key={index}
+                data-cy={`subject-${index}`}
+              >
+                <div className="subject_header">
+                  {item.name}
+                  <DeleteIcon handler={() => handleRemoveSubject(item.name)} />
+                </div>
+                <div className="module_header">
+                  Modules
+                  {isActive ? (
+                    <CloseIcon handler={() => setIsActive(!isActive)} />
+                  ) : (
+                    <AddIcon handler={() => setIsActive(!isActive)} />
+                  )}
+                </div>
+                <EntityForm
+                  handler={handleAddModule}
+                  label="Add Module"
+                  subjectIndex={index}
+                  subjectName={item.name}
+                  isActive={isActive}
+                />
                 <ul>
                   {item.modules.map((mod, i) => (
-                    <li key={i} data-cy={`module-${index}-${i}`}>
+                    <li
+                      className="group"
+                      key={i}
+                      data-cy={`module-${index}-${i}`}
+                    >
                       {mod}
                       <DeleteIcon
                         handler={() =>
@@ -70,19 +92,10 @@ export const SubjectsView = () => {
                     </li>
                   ))}
                 </ul>
-                <br />
-                <EntityForm
-                  handler={handleAddModule}
-                  label="Add Module New"
-                  subjectIndex={index}
-                  subjectName={item.name}
-                />
               </li>
             ))}
-        </ol>
+        </ul>
       </div>
-      <br />
-      <EntityForm handler={handleAddSubject} label="Add Subject New" />
     </div>
   );
 };

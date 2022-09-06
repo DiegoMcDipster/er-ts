@@ -1,10 +1,22 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useState } from "react";
+import EntityForm from "../Components/EntityForm";
+import { UID } from "../demo-const";
+import { addSubject } from "../store/features/subjects/subjectsSlice";
 import { SubjectsView } from "../store/features/subjects/subjectsView";
+import { useAppDispatch } from "../store/hook";
 import styles from "../styles/Home.module.css";
 
 const MySubjModules: NextPage = () => {
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
+  const handleAddSubject = (value: string): void => {
+    dispatch(addSubject({ value, uid: UID }));
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,11 +25,25 @@ const MySubjModules: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Link href="/">
+        <a className={styles.nav} data-cy="nav-home">
+          Home
+        </a>
+      </Link>
       <main className={styles.main}>
-        <Link href="/">
-          <a data-cy="nav-home">Home</a>
-        </Link>
         <h1 className={styles.title}>My Subjects and Modules</h1>
+        <button
+          className="btn"
+          onClick={() => setIsActive(!isActive)}
+          data-cy="add-btn"
+        >
+          {isActive ? "Cancel" : "Add Subject"}
+        </button>
+        <EntityForm
+          handler={handleAddSubject}
+          label="Submit"
+          isActive={isActive}
+        />
         <SubjectsView />
       </main>
     </div>

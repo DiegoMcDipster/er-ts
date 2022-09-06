@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import EntityForm from "../../../Components/EntityForm";
 import { DeleteIcon } from "../../../Components/Icons";
 import { useAppDispatch, useAppSelector } from "../../hook";
-import { addGroup, fetchGroups, removeGroup } from "./groupsSlice";
+import { fetchGroups, removeGroup } from "./groupsSlice";
 
 // This constant is only here for demo purposes!
 import { UID } from "../../../demo-const";
@@ -15,27 +14,23 @@ export const GroupsView = () => {
     dispatch(fetchGroups(UID));
   }, [dispatch]);
 
-  const handleAddGroup = (value: string) => {
-    dispatch(addGroup({ value, uid: UID }));
-  };
-
   const handleRemoveGroup = (value: string) => {
     dispatch(removeGroup({ value, uid: UID }));
   };
 
   return (
     <div>
+      <h3>Current Groups</h3>
       <div>
-        <ol>
+        <ul>
           {groups.map((item, index) => (
-            <li key={index} data-cy={`group-${index}`}>
+            <li className="entity group" key={index} data-cy={`group-${index}`}>
               {item}
               <DeleteIcon handler={() => handleRemoveGroup(item)} />
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
-      <EntityForm handler={handleAddGroup} label="Add Group New" />
     </div>
   );
 };

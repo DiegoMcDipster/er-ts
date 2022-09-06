@@ -48,16 +48,19 @@ export type ModuleStoreProps = {
 /**
  * Props used by the Entity form
  */
-export type EntityProps = {
+type formProps = {
   label: string;
-  handler: (value: string) => void;
+  isActive: boolean;
 };
 
-export type SubjectModule = {
-  label: string;
+export interface EntityProps extends formProps {
+  handler: (value: string) => void;
+}
+
+export interface SubjectModule extends formProps {
   handler: (value: string, subjectIndex: number, subjectName: string) => void;
   subjectIndex: number;
   subjectName: string;
-};
+}
 
 export type EntityFormProps = EntityProps | SubjectModule;

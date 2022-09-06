@@ -1,10 +1,22 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useState } from "react";
+import EntityForm from "../Components/EntityForm";
+import { UID } from "../demo-const";
+import { addGroup } from "../store/features/groups/groupsSlice";
 import { GroupsView } from "../store/features/groups/GroupsView";
+import { useAppDispatch } from "../store/hook";
 import styles from "../styles/Home.module.css";
 
 const MyGroups: NextPage = () => {
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
+  const handleAddGroup = (value: string) => {
+    dispatch(addGroup({ value, uid: UID }));
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,11 +25,25 @@ const MyGroups: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Link href="/">
+        <a className={styles.nav} data-cy="nav-home">
+          Home
+        </a>
+      </Link>
       <main className={styles.main}>
-        <Link href="/">
-          <a data-cy="nav-home">Home</a>
-        </Link>
         <h1 className={styles.title}>My Groups</h1>
+        <button
+          onClick={() => setIsActive(!isActive)}
+          className={"btn"}
+          data-cy="add-btn"
+        >
+          {isActive ? "Cancel" : "Add Group"}
+        </button>
+        <EntityForm
+          handler={handleAddGroup}
+          label="Submit"
+          isActive={isActive}
+        />
         <GroupsView />
       </main>
     </div>

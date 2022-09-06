@@ -39,7 +39,10 @@
 const navHomeSelector = "[data-cy=nav-home]";
 
 Cypress.Commands.add("backToHomepage", () => {
-  cy.get(navHomeSelector).should("be.visible").and("contain", "Home").click();
+  cy.get(navHomeSelector)
+    .should("be.visible")
+    .and("contain", "Home")
+    .click({ force: true });
   cy.location("pathname").should("eq", "/");
 });
 
