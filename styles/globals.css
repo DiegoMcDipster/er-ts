@@ -98,6 +98,13 @@ ul {
   text-align: center;
 }
 
+.btn-small {
+  margin: 0.5rem 0;
+  min-width: 120px;
+  font-size: 1rem;
+  line-height: 1;
+}
+
 .btn:hover {
   background-color: #fefbdd;
   cursor: pointer;

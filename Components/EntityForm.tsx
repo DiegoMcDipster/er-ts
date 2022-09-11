@@ -25,7 +25,11 @@ const EntityForm = (props: EntityFormProps): ReactElement => {
         onChange={(e) => setValue(e.target.value)}
         data-cy="input-field"
       />
-      <button className="btn" onClick={handleClick} data-cy="submit-btn">
+      <button
+        className={`btn ${label === "Add Module" ? "btn-small" : ""}`}
+        onClick={handleClick}
+        data-cy="submit-btn"
+      >
         {label}
       </button>
     </div>
